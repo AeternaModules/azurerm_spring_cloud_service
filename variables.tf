@@ -72,10 +72,10 @@ EOT
     log_stream_public_endpoint_enabled = optional(bool)
     managed_environment_id             = optional(string)
     service_registry_enabled           = optional(bool)
-    sku_name                           = optional(string, "S0")
+    sku_name                           = optional(string) # Default: "S0"
     sku_tier                           = optional(string)
     tags                               = optional(map(string))
-    zone_redundant                     = optional(bool, false)
+    zone_redundant                     = optional(bool) # Default: false
     config_server_git_setting = optional(object({
       http_basic_auth = optional(object({
         password = string
@@ -95,7 +95,7 @@ EOT
           host_key                         = optional(string)
           host_key_algorithm               = optional(string)
           private_key                      = string
-          strict_host_key_checking_enabled = optional(bool, true)
+          strict_host_key_checking_enabled = optional(bool) # Default: true
         }))
         uri = string
       }))
@@ -104,7 +104,7 @@ EOT
         host_key                         = optional(string)
         host_key_algorithm               = optional(string)
         private_key                      = string
-        strict_host_key_checking_enabled = optional(bool, true)
+        strict_host_key_checking_enabled = optional(bool) # Default: true
       }))
       uri = string
     }))
@@ -126,14 +126,14 @@ EOT
       app_network_resource_group             = optional(string)
       app_subnet_id                          = string
       cidr_ranges                            = list(string)
-      outbound_type                          = optional(string, "loadBalancer")
+      outbound_type                          = optional(string) # Default: "loadBalancer"
       read_timeout_seconds                   = optional(number)
       service_runtime_network_resource_group = optional(string)
       service_runtime_subnet_id              = string
     }))
     trace = optional(object({
       connection_string = optional(string)
-      sample_rate       = optional(number, 10)
+      sample_rate       = optional(number) # Default: 10
     }))
   }))
 }
