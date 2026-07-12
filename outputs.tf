@@ -1,3 +1,7 @@
+output "spring_cloud_services_id" {
+  description = "Map of id values across all spring_cloud_services, keyed the same as var.spring_cloud_services"
+  value       = { for k, v in azurerm_spring_cloud_service.spring_cloud_services : k => v.id }
+}
 output "spring_cloud_services_build_agent_pool_size" {
   description = "Map of build_agent_pool_size values across all spring_cloud_services, keyed the same as var.spring_cloud_services"
   value       = { for k, v in azurerm_spring_cloud_service.spring_cloud_services : k => v.build_agent_pool_size }
