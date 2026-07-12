@@ -25,7 +25,7 @@ resource "azurerm_spring_cloud_service" "spring_cloud_services" {
       }
       label = config_server_git_setting.value.label
       dynamic "repository" {
-        for_each = config_server_git_setting.value.repository != null ? [config_server_git_setting.value.repository] : []
+        for_each = config_server_git_setting.value.repository != null ? config_server_git_setting.value.repository : []
         content {
           dynamic "http_basic_auth" {
             for_each = repository.value.http_basic_auth != null ? [repository.value.http_basic_auth] : []
@@ -65,7 +65,7 @@ resource "azurerm_spring_cloud_service" "spring_cloud_services" {
   }
 
   dynamic "container_registry" {
-    for_each = each.value.container_registry != null ? [each.value.container_registry] : []
+    for_each = each.value.container_registry != null ? each.value.container_registry : []
     content {
       name     = container_registry.value.name
       password = container_registry.value.password

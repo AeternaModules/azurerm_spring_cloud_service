@@ -82,7 +82,7 @@ EOT
         username = string
       }))
       label = optional(string)
-      repository = optional(object({
+      repository = optional(list(object({
         http_basic_auth = optional(object({
           password = string
           username = string
@@ -98,7 +98,7 @@ EOT
           strict_host_key_checking_enabled = optional(bool) # Default: true
         }))
         uri = string
-      }))
+      })))
       search_paths = optional(list(string))
       ssh_auth = optional(object({
         host_key                         = optional(string)
@@ -108,12 +108,12 @@ EOT
       }))
       uri = string
     }))
-    container_registry = optional(object({
+    container_registry = optional(list(object({
       name     = string
       password = string
       server   = string
       username = string
-    }))
+    })))
     default_build_service = optional(object({
       container_registry_name = optional(string)
     }))
@@ -136,150 +136,6 @@ EOT
       sample_rate       = optional(number) # Default: 10
     }))
   }))
-  validation {
-    condition = alltrue([
-      for k, v in var.spring_cloud_services : (
-        v.sku_name == null || (contains(["B0", "S0", "E0"], v.sku_name))
-      )
-    ])
-    error_message = "must be one of: B0, S0, E0"
-  }
-  validation {
-    condition = alltrue([
-      for k, v in var.spring_cloud_services : (
-        v.sku_tier == null || (contains(["Basic", "Enterprise", "Standard", "StandardGen2"], v.sku_tier))
-      )
-    ])
-    error_message = "must be one of: Basic, Enterprise, Standard, StandardGen2"
-  }
-  validation {
-    condition = alltrue([
-      for k, v in var.spring_cloud_services : (
-        v.build_agent_pool_size == null || (contains(["S1", "S2", "S3", "S4", "S5"], v.build_agent_pool_size))
-      )
-    ])
-    error_message = "must be one of: S1, S2, S3, S4, S5"
-  }
-  validation {
-    condition = alltrue([
-      for k, v in var.spring_cloud_services : (
-        v.container_registry == null || (length(v.container_registry.name) > 0)
-      )
-    ])
-    error_message = "must not be empty"
-  }
-  validation {
-    condition = alltrue([
-      for k, v in var.spring_cloud_services : (
-        v.container_registry == null || (length(v.container_registry.password) > 0)
-      )
-    ])
-    error_message = "must not be empty"
-  }
-  validation {
-    condition = alltrue([
-      for k, v in var.spring_cloud_services : (
-        v.container_registry == null || (length(v.container_registry.server) > 0)
-      )
-    ])
-    error_message = "must not be empty"
-  }
-  validation {
-    condition = alltrue([
-      for k, v in var.spring_cloud_services : (
-        v.container_registry == null || (length(v.container_registry.username) > 0)
-      )
-    ])
-    error_message = "must not be empty"
-  }
-  validation {
-    condition = alltrue([
-      for k, v in var.spring_cloud_services : (
-        v.default_build_service == null || (v.default_build_service.container_registry_name == null || (length(v.default_build_service.container_registry_name) > 0))
-      )
-    ])
-    error_message = "must not be empty"
-  }
-  validation {
-    condition = alltrue([
-      for k, v in var.spring_cloud_services : (
-        v.marketplace == null || (length(v.marketplace.plan) > 0)
-      )
-    ])
-    error_message = "must not be empty"
-  }
-  validation {
-    condition = alltrue([
-      for k, v in var.spring_cloud_services : (
-        v.marketplace == null || (length(v.marketplace.publisher) > 0)
-      )
-    ])
-    error_message = "must not be empty"
-  }
-  validation {
-    condition = alltrue([
-      for k, v in var.spring_cloud_services : (
-        v.marketplace == null || (length(v.marketplace.product) > 0)
-      )
-    ])
-    error_message = "must not be empty"
-  }
-  validation {
-    condition = alltrue([
-      for k, v in var.spring_cloud_services : (
-        v.network == null || (v.network.outbound_type == null || (contains(["loadBalancer", "userDefinedRouting"], v.network.outbound_type)))
-      )
-    ])
-    error_message = "must be one of: loadBalancer, userDefinedRouting"
-  }
-  validation {
-    condition = alltrue([
-      for k, v in var.spring_cloud_services : (
-        v.network == null || (v.network.read_timeout_seconds == null || (v.network.read_timeout_seconds >= 0))
-      )
-    ])
-    error_message = "must be at least 0"
-  }
-  validation {
-    condition = alltrue([
-      for k, v in var.spring_cloud_services : (
-        v.config_server_git_setting == null || (v.config_server_git_setting.search_paths == null || (length(v.config_server_git_setting.search_paths) > 0))
-      )
-    ])
-    error_message = "must not be empty"
-  }
-  validation {
-    condition = alltrue([
-      for k, v in var.spring_cloud_services : (
-        v.config_server_git_setting == null || (v.config_server_git_setting.repository == null || (length(v.config_server_git_setting.repository.name) > 0))
-      )
-    ])
-    error_message = "must not be empty"
-  }
-  validation {
-    condition = alltrue([
-      for k, v in var.spring_cloud_services : (
-        v.config_server_git_setting == null || (v.config_server_git_setting.repository == null || (v.config_server_git_setting.repository.pattern == null || (length(v.config_server_git_setting.repository.pattern) > 0)))
-      )
-    ])
-    error_message = "must not be empty"
-  }
-  validation {
-    condition = alltrue([
-      for k, v in var.spring_cloud_services : (
-        v.config_server_git_setting == null || (v.config_server_git_setting.repository == null || (v.config_server_git_setting.repository.search_paths == null || (length(v.config_server_git_setting.repository.search_paths) > 0)))
-      )
-    ])
-    error_message = "must not be empty"
-  }
-  validation {
-    condition = alltrue([
-      for k, v in var.spring_cloud_services : (
-        v.trace == null || (v.trace.connection_string == null || (length(v.trace.connection_string) > 0))
-      )
-    ])
-    error_message = "must not be empty"
-  }
   # --- Unconfirmed validation candidates, derived from azurerm_spring_cloud_service's provider source ---
   # Not auto-enabled: either a bespoke provider validator we can't safely translate,
   # or a path that crosses a list-typed block (needs its own for_each wrapping).
@@ -304,10 +160,43 @@ EOT
   #   source:    [from resourcegroups.ValidateName: invalid when len(value) == 0]
   # path: resource_group_name
   #   source:    [from resourcegroups.ValidateName] !matched
+  # path: sku_name
+  #   condition: contains(["B0", "S0", "E0"], value)
+  #   message:   must be one of: B0, S0, E0
+  # path: sku_tier
+  #   condition: contains(["Basic", "Enterprise", "Standard", "StandardGen2"], value)
+  #   message:   must be one of: Basic, Enterprise, Standard, StandardGen2
   # path: managed_environment_id
   #   source:    [from azure.ValidateResourceID] !ok
   # path: managed_environment_id
   #   source:    [from azure.ValidateResourceID] err != nil
+  # path: build_agent_pool_size
+  #   condition: contains(["S1", "S2", "S3", "S4", "S5"], value)
+  #   message:   must be one of: S1, S2, S3, S4, S5
+  # path: container_registry.name
+  #   condition: length(value) > 0
+  #   message:   must not be empty
+  # path: container_registry.password
+  #   condition: length(value) > 0
+  #   message:   must not be empty
+  # path: container_registry.server
+  #   condition: length(value) > 0
+  #   message:   must not be empty
+  # path: container_registry.username
+  #   condition: length(value) > 0
+  #   message:   must not be empty
+  # path: default_build_service.container_registry_name
+  #   condition: length(value) > 0
+  #   message:   must not be empty
+  # path: marketplace.plan
+  #   condition: length(value) > 0
+  #   message:   must not be empty
+  # path: marketplace.publisher
+  #   condition: length(value) > 0
+  #   message:   must not be empty
+  # path: marketplace.product
+  #   condition: length(value) > 0
+  #   message:   must not be empty
   # path: network.app_subnet_id
   #   source:    [from commonids.ValidateSubnetID] !ok
   # path: network.app_subnet_id
@@ -316,14 +205,35 @@ EOT
   #   source:    [from commonids.ValidateSubnetID] !ok
   # path: network.service_runtime_subnet_id
   #   source:    [from commonids.ValidateSubnetID] err != nil
+  # path: network.outbound_type
+  #   condition: contains(["loadBalancer", "userDefinedRouting"], value)
+  #   message:   must be one of: loadBalancer, userDefinedRouting
+  # path: network.read_timeout_seconds
+  #   condition: value >= 0
+  #   message:   must be at least 0
   # path: config_server_git_setting.uri
   #   source:    [from validate.ConfigServerURI] !ok
   # path: config_server_git_setting.uri
   #   source:    [from validate.ConfigServerURI] !strings.HasPrefix(v, "http://") && !strings.HasPrefix(v, "https://") && !strings.HasPrefix(v, "git@") && !strings.HasPrefix(v, "ssh://")
+  # path: config_server_git_setting.search_paths[*]
+  #   condition: length(value) > 0
+  #   message:   must not be empty
+  # path: config_server_git_setting.repository.name
+  #   condition: length(value) > 0
+  #   message:   must not be empty
   # path: config_server_git_setting.repository.uri
   #   source:    [from validate.ConfigServerURI] !ok
   # path: config_server_git_setting.repository.uri
   #   source:    [from validate.ConfigServerURI] !strings.HasPrefix(v, "http://") && !strings.HasPrefix(v, "https://") && !strings.HasPrefix(v, "git@") && !strings.HasPrefix(v, "ssh://")
+  # path: config_server_git_setting.repository.pattern[*]
+  #   condition: length(value) > 0
+  #   message:   must not be empty
+  # path: config_server_git_setting.repository.search_paths[*]
+  #   condition: length(value) > 0
+  #   message:   must not be empty
+  # path: trace.connection_string
+  #   condition: length(value) > 0
+  #   message:   must not be empty
   # path: trace.sample_rate
   #   source:    validation.FloatBetween(...) - no translation rule yet, add one
   # path: tags
