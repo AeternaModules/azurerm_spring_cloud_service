@@ -136,119 +136,190 @@ EOT
       sample_rate       = optional(number)
     }))
   }))
-  # --- Unconfirmed validation candidates, derived from azurerm_spring_cloud_service's provider source ---
-  # Not auto-enabled: either a bespoke provider validator we can't safely translate,
-  # or a path that crosses a list-typed block (needs its own for_each wrapping).
-  # Review, translate into a real validation{} block above, and delete once confirmed.
-  # path: name
-  #   source:    [from validate.SpringCloudServiceName] !ok
-  # path: name
-  #   source:    [from validate.SpringCloudServiceName] !regexp.MustCompile(`^([a-z])([a-z\d-]{2,30})([a-z\d])$`).MatchString(v)
-  # path: location
-  #   source:    location.EnhancedValidate: no recognizable `if ... { errors = append(...) }` pattern - read it by hand
-  # path: resource_group_name
-  #   condition: length(value) <= 90
-  #   message:   [from resourcegroups.ValidateName: invalid when len(value) > 90]
-  #   source:    [from resourcegroups.ValidateName: invalid when len(value) > 90]
-  # path: resource_group_name
-  #   condition: !endswith(value, ".")
-  #   message:   [from resourcegroups.ValidateName: must not end with "."]
-  #   source:    [from resourcegroups.ValidateName: must not end with "."]
-  # path: resource_group_name
-  #   condition: length(value) != 0
-  #   message:   [from resourcegroups.ValidateName: invalid when len(value) == 0]
-  #   source:    [from resourcegroups.ValidateName: invalid when len(value) == 0]
-  # path: resource_group_name
-  #   source:    [from resourcegroups.ValidateName] !matched
-  # path: sku_name
-  #   condition: contains(["B0", "S0", "E0"], value)
-  #   message:   must be one of: B0, S0, E0
-  # path: sku_tier
-  #   condition: contains(["Basic", "Enterprise", "Standard", "StandardGen2"], value)
-  #   message:   must be one of: Basic, Enterprise, Standard, StandardGen2
-  # path: managed_environment_id
-  #   source:    [from azure.ValidateResourceID] !ok
-  # path: managed_environment_id
-  #   source:    [from azure.ValidateResourceID] err != nil
-  # path: build_agent_pool_size
-  #   condition: contains(["S1", "S2", "S3", "S4", "S5"], value)
-  #   message:   must be one of: S1, S2, S3, S4, S5
-  # path: container_registry.name
-  #   condition: length(value) > 0
-  #   message:   must not be empty
-  # path: container_registry.password
-  #   condition: length(value) > 0
-  #   message:   must not be empty
-  # path: container_registry.server
-  #   condition: length(value) > 0
-  #   message:   must not be empty
-  # path: container_registry.username
-  #   condition: length(value) > 0
-  #   message:   must not be empty
-  # path: default_build_service.container_registry_name
-  #   condition: length(value) > 0
-  #   message:   must not be empty
-  # path: marketplace.plan
-  #   condition: length(value) > 0
-  #   message:   must not be empty
-  # path: marketplace.publisher
-  #   condition: length(value) > 0
-  #   message:   must not be empty
-  # path: marketplace.product
-  #   condition: length(value) > 0
-  #   message:   must not be empty
-  # path: network.app_subnet_id
-  #   source:    [from commonids.ValidateSubnetID] !ok
-  # path: network.app_subnet_id
-  #   source:    [from commonids.ValidateSubnetID] err != nil
-  # path: network.service_runtime_subnet_id
-  #   source:    [from commonids.ValidateSubnetID] !ok
-  # path: network.service_runtime_subnet_id
-  #   source:    [from commonids.ValidateSubnetID] err != nil
-  # path: network.outbound_type
-  #   condition: contains(["loadBalancer", "userDefinedRouting"], value)
-  #   message:   must be one of: loadBalancer, userDefinedRouting
-  # path: network.read_timeout_seconds
-  #   condition: value >= 0
-  #   message:   must be at least 0
-  # path: config_server_git_setting.uri
-  #   source:    [from validate.ConfigServerURI] !ok
-  # path: config_server_git_setting.uri
-  #   source:    [from validate.ConfigServerURI] !strings.HasPrefix(v, "http://") && !strings.HasPrefix(v, "https://") && !strings.HasPrefix(v, "git@") && !strings.HasPrefix(v, "ssh://")
-  # path: config_server_git_setting.search_paths[*]
-  #   condition: length(value) > 0
-  #   message:   must not be empty
-  # path: config_server_git_setting.repository.name
-  #   condition: length(value) > 0
-  #   message:   must not be empty
-  # path: config_server_git_setting.repository.uri
-  #   source:    [from validate.ConfigServerURI] !ok
-  # path: config_server_git_setting.repository.uri
-  #   source:    [from validate.ConfigServerURI] !strings.HasPrefix(v, "http://") && !strings.HasPrefix(v, "https://") && !strings.HasPrefix(v, "git@") && !strings.HasPrefix(v, "ssh://")
-  # path: config_server_git_setting.repository.pattern[*]
-  #   condition: length(value) > 0
-  #   message:   must not be empty
-  # path: config_server_git_setting.repository.search_paths[*]
-  #   condition: length(value) > 0
-  #   message:   must not be empty
-  # path: trace.connection_string
-  #   condition: length(value) > 0
-  #   message:   must not be empty
-  # path: trace.sample_rate
-  #   source:    validation.FloatBetween(...) - no translation rule yet, add one
-  # path: tags
-  #   condition: length(value) <= 50
-  #   message:   [from tags.Validate: invalid when len(value) > 50]
-  #   source:    [from tags.Validate: invalid when len(value) > 50]
-  # path: tags
-  #   condition: length(value) <= 512
-  #   message:   [from tags.Validate: invalid when len(value) > 512]
-  #   source:    [from tags.Validate: invalid when len(value) > 512]
-  # path: tags
-  #   source:    [from tags.Validate] err != nil
-  # path: tags
-  #   condition: length(value) <= 256
-  #   message:   [from tags.Validate: invalid when len(value) > 256]
-  #   source:    [from tags.Validate: invalid when len(value) > 256]
+  validation {
+    condition = alltrue([
+      for k, v in var.spring_cloud_services : (
+        length(v.resource_group_name) <= 90
+      )
+    ])
+    error_message = "[from resourcegroups.ValidateName: invalid when len(value) > 90]"
+  }
+  validation {
+    condition = alltrue([
+      for k, v in var.spring_cloud_services : (
+        !endswith(v.resource_group_name, ".")
+      )
+    ])
+    error_message = "[from resourcegroups.ValidateName: must not end with \".\"]"
+  }
+  validation {
+    condition = alltrue([
+      for k, v in var.spring_cloud_services : (
+        length(v.resource_group_name) != 0
+      )
+    ])
+    error_message = "[from resourcegroups.ValidateName: invalid when len(value) == 0]"
+  }
+  validation {
+    condition = alltrue([
+      for k, v in var.spring_cloud_services : (
+        v.sku_name == null || (contains(["B0", "S0", "E0"], v.sku_name))
+      )
+    ])
+    error_message = "must be one of: B0, S0, E0"
+  }
+  validation {
+    condition = alltrue([
+      for k, v in var.spring_cloud_services : (
+        v.sku_tier == null || (contains(["Basic", "Enterprise", "Standard", "StandardGen2"], v.sku_tier))
+      )
+    ])
+    error_message = "must be one of: Basic, Enterprise, Standard, StandardGen2"
+  }
+  validation {
+    condition = alltrue([
+      for k, v in var.spring_cloud_services : (
+        v.build_agent_pool_size == null || (contains(["S1", "S2", "S3", "S4", "S5"], v.build_agent_pool_size))
+      )
+    ])
+    error_message = "must be one of: S1, S2, S3, S4, S5"
+  }
+  validation {
+    condition = alltrue([
+      for k, v in var.spring_cloud_services : (
+        v.container_registry == null || alltrue([for item in v.container_registry : (length(item.name) > 0)])
+      )
+    ])
+    error_message = "must not be empty"
+  }
+  validation {
+    condition = alltrue([
+      for k, v in var.spring_cloud_services : (
+        v.container_registry == null || alltrue([for item in v.container_registry : (length(item.password) > 0)])
+      )
+    ])
+    error_message = "must not be empty"
+  }
+  validation {
+    condition = alltrue([
+      for k, v in var.spring_cloud_services : (
+        v.container_registry == null || alltrue([for item in v.container_registry : (length(item.server) > 0)])
+      )
+    ])
+    error_message = "must not be empty"
+  }
+  validation {
+    condition = alltrue([
+      for k, v in var.spring_cloud_services : (
+        v.container_registry == null || alltrue([for item in v.container_registry : (length(item.username) > 0)])
+      )
+    ])
+    error_message = "must not be empty"
+  }
+  validation {
+    condition = alltrue([
+      for k, v in var.spring_cloud_services : (
+        v.default_build_service == null || (v.default_build_service.container_registry_name == null || (length(v.default_build_service.container_registry_name) > 0))
+      )
+    ])
+    error_message = "must not be empty"
+  }
+  validation {
+    condition = alltrue([
+      for k, v in var.spring_cloud_services : (
+        v.marketplace == null || (length(v.marketplace.plan) > 0)
+      )
+    ])
+    error_message = "must not be empty"
+  }
+  validation {
+    condition = alltrue([
+      for k, v in var.spring_cloud_services : (
+        v.marketplace == null || (length(v.marketplace.publisher) > 0)
+      )
+    ])
+    error_message = "must not be empty"
+  }
+  validation {
+    condition = alltrue([
+      for k, v in var.spring_cloud_services : (
+        v.marketplace == null || (length(v.marketplace.product) > 0)
+      )
+    ])
+    error_message = "must not be empty"
+  }
+  validation {
+    condition = alltrue([
+      for k, v in var.spring_cloud_services : (
+        v.network == null || (v.network.outbound_type == null || (contains(["loadBalancer", "userDefinedRouting"], v.network.outbound_type)))
+      )
+    ])
+    error_message = "must be one of: loadBalancer, userDefinedRouting"
+  }
+  validation {
+    condition = alltrue([
+      for k, v in var.spring_cloud_services : (
+        v.network == null || (v.network.read_timeout_seconds == null || (v.network.read_timeout_seconds >= 0))
+      )
+    ])
+    error_message = "must be at least 0"
+  }
+  validation {
+    condition = alltrue([
+      for k, v in var.spring_cloud_services : (
+        v.config_server_git_setting == null || (v.config_server_git_setting.search_paths == null || (alltrue([for x in v.config_server_git_setting.search_paths : length(x) > 0])))
+      )
+    ])
+    error_message = "must not be empty"
+  }
+  validation {
+    condition = alltrue([
+      for k, v in var.spring_cloud_services : (
+        v.config_server_git_setting == null || (v.config_server_git_setting.repository == null || alltrue([for item in v.config_server_git_setting.repository : (length(item.name) > 0)]))
+      )
+    ])
+    error_message = "must not be empty"
+  }
+  validation {
+    condition = alltrue([
+      for k, v in var.spring_cloud_services : (
+        v.config_server_git_setting == null || (v.config_server_git_setting.repository == null || alltrue([for item in v.config_server_git_setting.repository : (item.pattern == null || (alltrue([for x in item.pattern : length(x) > 0])))]))
+      )
+    ])
+    error_message = "must not be empty"
+  }
+  validation {
+    condition = alltrue([
+      for k, v in var.spring_cloud_services : (
+        v.config_server_git_setting == null || (v.config_server_git_setting.repository == null || alltrue([for item in v.config_server_git_setting.repository : (item.search_paths == null || (alltrue([for x in item.search_paths : length(x) > 0])))]))
+      )
+    ])
+    error_message = "must not be empty"
+  }
+  validation {
+    condition = alltrue([
+      for k, v in var.spring_cloud_services : (
+        v.trace == null || (v.trace.connection_string == null || (length(v.trace.connection_string) > 0))
+      )
+    ])
+    error_message = "must not be empty"
+  }
+  validation {
+    condition = alltrue([
+      for k, v in var.spring_cloud_services : (
+        v.trace == null || (v.trace.sample_rate == null || (v.trace.sample_rate >= 0 && v.trace.sample_rate <= 100))
+      )
+    ])
+    error_message = "must be between 0 and 100"
+  }
+  validation {
+    condition = alltrue([
+      for k, v in var.spring_cloud_services : (
+        v.tags == null || (length(v.tags) <= 50)
+      )
+    ])
+    error_message = "[from tags.Validate: invalid when len(value) > 50]"
+  }
+  # Note: 17 additional provider-side validators are enforced at apply time but not mirrored as validation{} blocks here (bespoke or non-mechanically-translatable).
 }
 
