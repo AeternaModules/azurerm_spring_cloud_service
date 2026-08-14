@@ -8,7 +8,7 @@ output "spring_cloud_services_build_agent_pool_size" {
 }
 output "spring_cloud_services_config_server_git_setting" {
   description = "Map of config_server_git_setting values across all spring_cloud_services, keyed the same as var.spring_cloud_services"
-  value       = { for k, v in azurerm_spring_cloud_service.spring_cloud_services : k => v.config_server_git_setting if v.config_server_git_setting != null && length(v.config_server_git_setting) > 0 }
+  value       = { for k, v in azurerm_spring_cloud_service.spring_cloud_services : k => one(v.config_server_git_setting) if v.config_server_git_setting != null && length(v.config_server_git_setting) > 0 }
   sensitive   = true
 }
 output "spring_cloud_services_container_registry" {
@@ -18,7 +18,7 @@ output "spring_cloud_services_container_registry" {
 }
 output "spring_cloud_services_default_build_service" {
   description = "Map of default_build_service values across all spring_cloud_services, keyed the same as var.spring_cloud_services"
-  value       = { for k, v in azurerm_spring_cloud_service.spring_cloud_services : k => v.default_build_service if v.default_build_service != null && length(v.default_build_service) > 0 }
+  value       = { for k, v in azurerm_spring_cloud_service.spring_cloud_services : k => one(v.default_build_service) if v.default_build_service != null && length(v.default_build_service) > 0 }
 }
 output "spring_cloud_services_location" {
   description = "Map of location values across all spring_cloud_services, keyed the same as var.spring_cloud_services"
@@ -34,7 +34,7 @@ output "spring_cloud_services_managed_environment_id" {
 }
 output "spring_cloud_services_marketplace" {
   description = "Map of marketplace values across all spring_cloud_services, keyed the same as var.spring_cloud_services"
-  value       = { for k, v in azurerm_spring_cloud_service.spring_cloud_services : k => v.marketplace if v.marketplace != null && length(v.marketplace) > 0 }
+  value       = { for k, v in azurerm_spring_cloud_service.spring_cloud_services : k => one(v.marketplace) if v.marketplace != null && length(v.marketplace) > 0 }
 }
 output "spring_cloud_services_name" {
   description = "Map of name values across all spring_cloud_services, keyed the same as var.spring_cloud_services"
@@ -42,7 +42,7 @@ output "spring_cloud_services_name" {
 }
 output "spring_cloud_services_network" {
   description = "Map of network values across all spring_cloud_services, keyed the same as var.spring_cloud_services"
-  value       = { for k, v in azurerm_spring_cloud_service.spring_cloud_services : k => v.network if v.network != null && length(v.network) > 0 }
+  value       = { for k, v in azurerm_spring_cloud_service.spring_cloud_services : k => one(v.network) if v.network != null && length(v.network) > 0 }
 }
 output "spring_cloud_services_outbound_public_ip_addresses" {
   description = "Map of outbound_public_ip_addresses values across all spring_cloud_services, keyed the same as var.spring_cloud_services"
@@ -78,7 +78,7 @@ output "spring_cloud_services_tags" {
 }
 output "spring_cloud_services_trace" {
   description = "Map of trace values across all spring_cloud_services, keyed the same as var.spring_cloud_services"
-  value       = { for k, v in azurerm_spring_cloud_service.spring_cloud_services : k => v.trace if v.trace != null && length(v.trace) > 0 }
+  value       = { for k, v in azurerm_spring_cloud_service.spring_cloud_services : k => one(v.trace) if v.trace != null && length(v.trace) > 0 }
 }
 output "spring_cloud_services_zone_redundant" {
   description = "Map of zone_redundant values across all spring_cloud_services, keyed the same as var.spring_cloud_services"
